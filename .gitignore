@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Folders
+Farm_Pin_Crop_DetectionFarm_Pin_Crop_Detection/
