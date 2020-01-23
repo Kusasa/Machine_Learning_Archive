@@ -129,4 +129,4 @@ dmypy.json
 .pyre/
 
 # Folders
-Farm_Pin_Crop_DetectionFarm_Pin_Crop_Detection/
+./Farm_Pin_Crop_DetectionFarm_Pin_Crop_Detection
