@@ -1,0 +1,23 @@
+PREDICTIVE MODEL ACCURACY IS BASE ON:
+
+
+1) The input variables:
+
+	- rainfall
+
+	- elevation
+
+	- slope
+
+	- landcover
+
+	- soil type
+
+2) The selected model algorithm:
+
+
+	- Run through all algorithm
+
+3) Model tuning:
+
+	- Run through list of parameters.
