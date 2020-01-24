@@ -9,15 +9,17 @@ Last Revision:      2020-01-23
 ------------------------------------------------------------------------------ """
 
 # Importing the libraries
-import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
 
 # Importing the dataset
-datasource = pd.read_csv('./data/Train.csv')
-nullCells = datasource.isna()   #Test data for nulls
-X = datasource.iloc[:, 3:21].values    # Still need to include the landcover column
-Y = datasource.iloc[:, 2].values
+dS = pd.read_csv('./data/Train.csv')
+nullCells = dS.isna()   #Test data for nulls
+training_columns = []
+for index in range(5,21):
+    training_columns.extend([index])
+training_columns = [3] + training_columns + [38]
+X = dS.iloc[:, training_columns].values
+Y = dS.iloc[:, 2].values
 
 # Feature Scaling
 from sklearn.preprocessing import StandardScaler
@@ -26,7 +28,7 @@ X = sc.fit_transform(X)
 
 # Fitting Kernel SVM to the Training set
 from sklearn.ensemble import RandomForestRegressor
-regressor = RandomForestRegressor(n_estimators = 10, random_state = 0)
+regressor = RandomForestRegressor(n_estimators = 100, random_state = 0)
 regressor.fit(X, Y)
 
 # Applying k-Fold Cross Validation
@@ -36,7 +38,17 @@ accuracies.mean()
 accuracies.std()
 
 #Prediction
-test_X = datasource.iloc[:, 21:39].values # Still need to include the elevation column
-test_X = sc.transform(test_X) 
-test_Y = regressor.predict(test_X)
-# save .csv with test_Y and grid ID
+pred_columns = []
+for index in range(21,38):
+    pred_columns.extend([index])
+pred_columns = [3] + pred_columns
+pred_X = dS.iloc[:, pred_columns].values
+pred_X = sc.transform(pred_X) 
+pred_Y = regressor.predict(pred_X)
+
+# Export pred_Y and grid ID
+Square_ID = dS.iloc[:, 39].values
+Square_ID = pd.DataFrame(data=Square_ID, columns=['Square_ID'])
+pred_Y = pd.DataFrame(data=pred_Y, columns=['target_2019'])
+pred_csv = pd.concat([Square_ID, pred_Y], axis=1, sort=False)
+pred_csv.to_csv('./submission.csv')
