@@ -26,18 +26,41 @@ from sklearn.preprocessing import StandardScaler
 sc = StandardScaler()
 X = sc.fit_transform(X)
 
-# Fitting Kernel SVM to the Training set
+# Fitting different algorithns to the Training set
+# And applying k-Fold Cross Validation to determine most accurate regressor
+from sklearn.linear_model import LinearRegression
+from sklearn.svm import SVR
+from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
-regressor = RandomForestRegressor(n_estimators = 100, random_state = 0)
-regressor.fit(X, Y)
-
-# Applying k-Fold Cross Validation
 from sklearn.model_selection import cross_val_score
-accuracies = cross_val_score(estimator = regressor, X = X, y = Y, cv = 10)
-accuracies.mean()
-accuracies.std()
 
-#Prediction
+algorithms = {'mlr' : LinearRegression(),
+              'svr' : SVR(kernel = 'rbf'),
+              'dtr' : DecisionTreeRegressor(random_state = 0),
+              'rfr' : RandomForestRegressor(n_estimators = 100, random_state = 0)}
+
+means = {'mlr' : '',
+         'svr' : '',
+         'dtr' : '',
+         'rfr' : ''}
+squared_means = {'mlr' : '',
+                 'svr' : '',
+                 'dtr' : '',
+                 'rfr' : ''}
+
+for algorithm in algorithms:
+    regressor = algorithms[algorithm]
+    regressor.fit(X, Y)
+    accuracies = cross_val_score(estimator = regressor, X = X, y = Y, cv = 10)
+    means[algorithm] = accuracies.mean()
+    squared_means[algorithm] = (accuracies.mean())**2
+
+best_regressor = min(means, key=squared_means.get)
+best_regressor_value = means[min(means, key=squared_means.get)]
+print('The Most Accurate regressor: ' + best_regressor + ' \n With RMSEcv of: ' + str(best_regressor_value))
+
+#Using the most accurate predictor to make prediction
+regressor = algorithms[best_regressor]
 pred_columns = []
 for index in range(21,38):
     pred_columns.extend([index])
