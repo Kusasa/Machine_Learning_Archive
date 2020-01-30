@@ -35,7 +35,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import cross_val_score
 
 algorithms = {'mlr' : LinearRegression(),
-              'svr' : SVR(kernel = 'rbf'),
+              'svr' : SVR(kernel = 'rbf', gamma = 'auto'),
               'dtr' : DecisionTreeRegressor(random_state = 0),
               'rfr' : RandomForestRegressor(n_estimators = 100, random_state = 0)}
 
