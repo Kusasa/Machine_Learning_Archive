@@ -10,6 +10,14 @@ Last Revision:      2020-01-23
 
 # Importing the libraries
 import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.svm import SVR
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import RandomizedSearchCV
+from sklearn.model_selection import GridSearchCV
+import numpy as np
 
 # Importing the dataset
 dS = pd.read_csv('./data/Train.csv')
@@ -28,14 +36,8 @@ X = sc.fit_transform(X)
 
 # Fitting different algorithns to the Training set
 # And applying k-Fold Cross Validation to determine most accurate regressor
-from sklearn.linear_model import LinearRegression
-from sklearn.svm import SVR
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.model_selection import cross_val_score
-
 algorithms = {'mlr' : LinearRegression(),
-              'svr' : SVR(kernel = 'rbf', gamma = 'auto'),
+              'svr' : SVR(kernel = 'rbf'),
               'dtr' : DecisionTreeRegressor(random_state = 0),
               'rfr' : RandomForestRegressor(n_estimators = 100, random_state = 0)}
 
@@ -59,8 +61,56 @@ best_regressor = min(means, key=squared_means.get)
 best_regressor_value = means[min(means, key=squared_means.get)]
 print('The Most Accurate regressor: ' + best_regressor + ' \n With RMSEcv of: ' + str(best_regressor_value))
 
+# Applying Random Search to find the range of best model parameters
+n_estimators = [int(x) for x in np.linspace(start = 100, stop = 2000, num = 11)]    # Number of trees in random forest
+max_features = ['auto', 'sqrt']          # Number of features to consider at every split
+max_depth = [int(x) for x in np.linspace(10, 110, num = 11)]          # Maximum number of levels in tree
+max_depth.append(None)
+min_samples_split = [2, 5, 10]          # Minimum number of samples required to split a node
+min_samples_leaf = [1, 2, 4]          # Minimum number of samples required at each leaf node
+bootstrap = [True, False]          # Method of selecting samples for training each tree
+random_state = [int(x) for x in np.linspace(0, 50, num = 11)] # Randomness of the bootstrapping of the samples used when building trees and the sampling of the features to consider when looking for the best split at each node
+
+parameters_random = {'n_estimators': n_estimators,
+               'max_features': max_features,
+               'max_depth': max_depth,
+               'min_samples_split': min_samples_split,
+               'min_samples_leaf': min_samples_leaf,
+               'bootstrap': bootstrap,
+               'random_state': random_state}
+
+regressor = RandomForestRegressor()
+rf_random = RandomizedSearchCV(estimator = regressor,
+                               param_distributions = parameters_random,
+                               n_iter = 50,
+                               cv = 5,
+                               verbose=2,
+                               n_jobs = -1)
+rf_random = rf_random.fit(X, Y)
+best_accuracy = rf_random.best_score_
+best_parameters = rf_random.best_params_
+
+# Applying Grid Search to find the best model parameters
+parameters_grid = {'n_estimators': [],
+                   'max_features': [],
+                   'max_depth': [],
+                   'min_samples_split': [],
+                   'min_samples_leaf': [],
+                   'bootstrap': [],
+                   'random_state': []}
+
+regressor = RandomForestRegressor()
+rf_grid = GridSearchCV(estimator = regressor,
+                       param_grid = parameters_grid,
+                       cv = 5,
+                       verbose=2,
+                       n_jobs = -1)
+rf_grid = rf_grid.fit(X, Y)
+best_accuracy = rf_grid.best_score_
+best_parameters = rf_grid.best_params_
+
 #Using the most accurate predictor to make prediction
-regressor = algorithms[best_regressor]
+regressor = RandomForestRegressor()
 pred_columns = []
 for index in range(21,38):
     pred_columns.extend([index])
