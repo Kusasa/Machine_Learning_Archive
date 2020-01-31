@@ -87,17 +87,17 @@ rf_random = RandomizedSearchCV(estimator = regressor,
                                verbose=2,
                                n_jobs = -1)
 rf_random = rf_random.fit(X, Y)
-best_accuracy = rf_random.best_score_
-best_parameters = rf_random.best_params_
+best_accuracy_random = rf_random.best_score_
+best_parameters_random = rf_random.best_params_
 
 # Applying Grid Search to find the best model parameters
-parameters_grid = {'n_estimators': [],
-                   'max_features': [],
-                   'max_depth': [],
-                   'min_samples_split': [],
-                   'min_samples_leaf': [],
-                   'bootstrap': [],
-                   'random_state': []}
+parameters_grid = {'n_estimators': [95, 100, 105],
+                   'max_features': ['sqrt'],
+                   'max_depth': [9, 10, 11],
+                   'min_samples_split': [2, 3],
+                   'min_samples_leaf': [1, 2],
+                   'bootstrap': [True],
+                   'random_state': [25, 30, 35, 40]}
 
 regressor = RandomForestRegressor()
 rf_grid = GridSearchCV(estimator = regressor,
@@ -106,11 +106,12 @@ rf_grid = GridSearchCV(estimator = regressor,
                        verbose=2,
                        n_jobs = -1)
 rf_grid = rf_grid.fit(X, Y)
-best_accuracy = rf_grid.best_score_
-best_parameters = rf_grid.best_params_
+best_accuracy_grid = rf_grid.best_score_
+best_parameters_grid = rf_grid.best_params_
 
 #Using the most accurate predictor to make prediction
-regressor = RandomForestRegressor()
+regressor = RandomForestRegressor(n_estimators = 100, random_state = 0)
+regressor = regressor.fit(X, Y)
 pred_columns = []
 for index in range(21,38):
     pred_columns.extend([index])
