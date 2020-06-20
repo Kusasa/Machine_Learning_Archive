@@ -140,5 +140,5 @@ notebook_env/Restaurant_Recommender/test_customers.csv
 notebook_env/Restaurant_Recommender/test_locations.csv
 notebook_env/Restaurant_Recommender/train_customers.csv
 notebook_env/Restaurant_Recommender/train_locations.csv
-notebook_env/Restaurant_Recommender/VariableDefinitions.csv
+notebook_env/Restaurant_Recommender/VariableDefinitions.txt
 notebook_env/Restaurant_Recommender/vendors.csv
