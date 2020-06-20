@@ -130,6 +130,15 @@ dmypy.json
 
 # Folders
 Farm_Pin_Crop_Detection/
+notebook_env/Game_Counting
 
 #Files
 Flood_Prediction/Flood_Prediction_Malawi.ipynb
+notebook_env/Restaurant_Recommender/orders.csv
+notebook_env/Restaurant_Recommender/SampleSubmission.csv
+notebook_env/Restaurant_Recommender/test_customers.csv
+notebook_env/Restaurant_Recommender/test_locations.csv
+notebook_env/Restaurant_Recommender/train_customers.csv
+notebook_env/Restaurant_Recommender/train_locations.csv
+notebook_env/Restaurant_Recommender/VariableDefinitions.csv
+notebook_env/Restaurant_Recommender/vendors.csv
