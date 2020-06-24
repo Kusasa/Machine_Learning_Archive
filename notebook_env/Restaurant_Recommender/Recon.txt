@@ -1,0 +1,13 @@
+1) What may potentially drive why a person chooses one restaurant over the others?
+    A) Geo-location:
+        - distance from restaurant (the closer the restaurant, the more preferable)
+        - area preferences/bias (people in the same area tend to have similar preferences)
+        - travel history - i.e. number of order locations (whether a person orders at multiple locations or not tends to affect their order preferences) 
+        - location type (the relationship of the person to his/her current location tends to affect their food preferences)
+        
+    B) Demographics:
+        - age
+        - sex
+        - ethnic group
+        - household composition
+        - economic class
